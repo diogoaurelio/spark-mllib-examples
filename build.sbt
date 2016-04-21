@@ -1,6 +1,7 @@
-import _root_.sbt.Keys._
-import _root_.sbt.Resolver
-import _root_.sbt._
+
+import AssemblyKeys._
+
+
 
 lazy val root = (project in file("."))
   .settings(
@@ -10,16 +11,25 @@ lazy val root = (project in file("."))
     mainClass in Compile := Some("com.berlinsmartdata")
   )
 
+val sparkVersion = "1.6.1"
+val sparkGroupId = "org.apache.spark"
+
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % "1.6.1",
-  "org.apache.spark" %% "spark-sql" % "1.6.1",
-  "org.apache.spark" %% "spark-hive" % "1.6.1",
-  "org.apache.spark" %% "spark-streaming" % "1.6.1",
-  "org.apache.spark" %% "spark-streaming-kafka" % "1.6.1",
-  "org.apache.spark" %% "spark-streaming-flume" % "1.6.1",
-  "org.apache.spark" %% "spark-mllib" % "1.6.1",
+  // groupId %% artifactId % version
+  sparkGroupId %% "spark-core" % sparkVersion,
+  sparkGroupId %% "spark-sql" % sparkVersion,
+  sparkGroupId %% "spark-hive" % sparkVersion,
+  sparkGroupId %% "spark-streaming" % sparkVersion,
+  sparkGroupId %% "spark-streaming-kafka" % sparkVersion,
+  sparkGroupId %% "spark-streaming-flume" % sparkVersion,
+  sparkGroupId %% "spark-mllib" % sparkVersion,
+  sparkGroupId %% "spark-streaming-kinesis-asl_2.10" % sparkVersion,
+  sparkGroupId %% "spark-streaming-kafka_2.10" % sparkVersion,
+  sparkGroupId %% "spark-streaming-flume_2.10" % sparkVersion,
+  sparkGroupId %% "spark-streaming-twitter_2.10" % sparkVersion,
   "org.apache.logging.log4j" % "log4j-api" % "2.5",
   "com.typesafe.play" %% "play-json" % "2.3.4",
+  "org.scalikejdbc" %% "scalikejdbc" % "2.2.1",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.3.3",
   "com.fasterxml.jackson.module" % "jackson-module-scala_2.10" % "2.3.3",
   "mysql" % "mysql-connector-java" % "5.1.31",
@@ -43,4 +53,10 @@ resolvers ++= Seq(
   "Mesosphere Public Repository" at "http://downloads.mesosphere.io/maven",
   Resolver.sonatypeRepo("public")
 )
-    
+
+assemblySettings
+
+mergeStrategy in assembly := {
+  case PathList("org", "apache", "spark", "unused", "UnusedStubClass.class") => MergeStrategy.first
+  case x => (mergeStrategy in assembly).value(x)
+}

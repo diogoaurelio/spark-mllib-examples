@@ -18,7 +18,7 @@ object FeatureReduction {
 
     val master = if(args.length > 0) args(0) else "local[*]"
     val appName = if(args.length > 1) args(1) else "Feature Reduction example"
-    val fileName = if(args.length > 2) args(2) else "iris-multiclass.csv"
+    val fileName = if(args.length > 2) args(2) else "datasets/iris-multiclass.csv"
     val path = if(args.length > 3) args(3) + "/" + fileName else getClass().getResource("/"+fileName).toURI().toString()
 
     val sc = init_context(master, appName)

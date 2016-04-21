@@ -23,7 +23,7 @@ object IrisLogisticRegression {
     val master = if(args.length > 0) args(0) else "local[*]"
     val appName = if(args.length > 1) args(1) else "IrisDataSetSample"
     val dataPath = if(args.length > 2) args(2) else ""
-    val dataFile = if(args.length >= 3) args(2) else "iris-multiclass.csv"
+    val dataFile = if(args.length >= 3) args(2) else "datasets/iris-multiclass.csv"
     val fullPath = getFullDataPath(dataPath, dataFile)
 
     val sc = init_context(appMaster=master, appName=appName)

@@ -27,8 +27,8 @@ object TweetsDatapipelineLR {
 
     val appName = if(args.length > 0) args(0) else "ML_pipeline"
     val appMaster = if(args.length > 1) args(1) else "local[*]"
-    val trainDataFile = if(args.length > 2) args(2) else "training-tweets.csv"
-    val testDataFile = if(args.length > 3) args(3) else "test-tweets.csv"
+    val trainDataFile = if(args.length > 2) args(2) else "datasets/training-tweets.csv"
+    val testDataFile = if(args.length > 3) args(3) else "datasets/test-tweets.csv"
     val trainDataPath = if(args.length > 4) args(4) else getClass.getResource("/"+ trainDataFile).toURI.toString
     val testDataPath = if(args.length > 5) args(5) else getClass.getResource("/"+ testDataFile).toURI.toString
 
@@ -52,7 +52,7 @@ object TweetsDatapipelineLR {
 
     //Note: only binary LogisticRegression supported for PMML
     //model.toPMML("SentimentAnalysisLogisticRegressionPredictiveModelMarkupLanguage.xml")
-    model.save("./models/TweetsLogisticRegression.fit")
+    //model.write.overwrite().save("./models/TweetsLogisticRegression.fit")
 
     val modelem = model.transform(testDf).select("id", "label","text","probability","prediction")
     modelem.collect().foreach {
